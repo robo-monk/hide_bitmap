@@ -8,8 +8,9 @@
 	pattern: .asciz "98C4S2E414480"
 
 .data
-	msg: .asciz "TTThhe answer for exam question 42 is not F."
-
+	msg:	.ascii "CCCCCCCCSSSSEE1111444400000000"
+		.ascii "TTThhe answer for exam question 42 is not F."
+		.asciz  "CCCCCCCCSSSSEE1111444400000000"
 
 main:
 	pushq %rbp
