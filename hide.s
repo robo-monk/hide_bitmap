@@ -20,9 +20,18 @@ main:
 	
 
 	movq $msg, %rdi
-	call rle_encode # encodes a message
+	/*call rle_encode # encodes a message*/
 
-	call rle_decode # decodeds and for now pritns the message 
+	/*call rle_decode # decodeds and for now pritns the message */
+
+	call generate_barcode
+	/*movq $3071, %r15*/
+	/*movq $0, %rsi*/
+	/*movb barcode(%r15), %sil*/
+	/*movq $digit, %rdi*/
+	/*movq $0, %rax*/
+	/*call printf*/
+
 	call write_file
 
 

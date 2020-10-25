@@ -23,7 +23,18 @@
 	red_px: .byte 255, 70, 70
 	black_px: .byte 0, 0, 0
 
-	write_file:
+/*movq $3071, %r15*/
+/*movq $0, %rsi*/
+/*movb barcode(%r15), %sil*/
+/*movq $digit, %rdi*/
+/*movq $0, %rax*/
+/*call printf*/
+write_file:
+	pushq	%rbp 			# push the base pointer (and align the stack)
+	pushq	%r15
+	movq	%rsp, %rbp		# copy stack pointer value to base pointer
+
+
 	# create a new file with writing permissions
 	movq $2, %rax	# we want sys_open
 	movq $filename, %rdi
@@ -47,15 +58,15 @@
 	syscall
 
 	# write pixel data
-	movq $1024, %r13
-	write_pixel:
+	movq $0, %r13
+	write_barcode:
 		movq %r15, %rdi
-		movq $1, %rax	# we want sys write
-		movq $red_px, %rsi
-		movq $3, %rdx	# write 10 bytes
+		movq $1, %rax		# we want sys write
+		movq $barcode, %rsi
+		movq $3072, %rdx	# write all bytes
 		syscall
-		decq %r13
-		cmpq $0, %r13
-		jg write_pixel
 
+	movq %rbp, %rsp
+	popq %r15
+	popq %rbp
 	ret
