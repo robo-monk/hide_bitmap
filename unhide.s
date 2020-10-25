@@ -16,21 +16,16 @@ main:
 	movq %rsp, %rbp
 	
 
+	call generate_barcode
+
 	call read_file
 	call decode_barcode
 	
+	/*movq $encoded_string, %rdi*/
+	/*movq $0, %rax*/
+	/*call printf*/
 	call rle_decode
-	movq $13, %r15
-	movq $0, %rsi
-	movb encoded_string(%r15), %sil
-	movq $char, %rdi
-	movq $0, %rax
-	call printf
-
-
-
-
-
+	
 	movq %rbp, %rsp
 	popq %rbp
 

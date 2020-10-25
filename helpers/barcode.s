@@ -1,7 +1,7 @@
 .data
 	barcode: .skip 3072	# skip size of image
-	barcode_row_fmt: .asciz "WWWWWWWWBBBBBBBBWWWWBBBBWWBBBWWRE"
-	/*barcode_row_fmt: .asciz "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWR"*/
+	barcode_row_fmt: .asciz "WBWWWWWWBBBBBBBBWWWWBBBBWWBBBWWRE" # basically the encryption key
+	/*barcode_row_fmt: .asciz "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWRE"*/
 	key: .skip 32
 	output: .skip 3072
 
@@ -18,7 +18,7 @@ generate_barcode:
 			cmpb $'E', (%r14)
 			je add_row
 
-			jmp add_white
+
 			cmpb $'W', (%r14)
 			je add_white
 
@@ -91,25 +91,20 @@ decode_barcode:
 	pushq %rbp	
 	movq %rsp, %rbp
 	
-	movq $50, %r15
+	movq $54, %r15
+	movq $0, %r11
 	denc_px:
 		movb dirty_barcode(%r15), %r13b
-		cmpq $FILESIZE, %r15
-		je denc_barcode_end
 
-		movb barcode(%r15), %r14b
+		movb barcode(%r11), %r14b
 
 		xorb %r13b, %r14b
-		movq %r15, %r13
-		subq $50, %r13
 
-		movq $255, %r12
-		subq %r14, %r12
-
-		movb %r12b, encoded_string(%r13) # remove dirty barcode's offset
+		movb %r14b, encoded_string(%r11) # remove dirty barcode's offset
 
 		incq %r15
-		cmpq $3072, %r15
+		incq %r11
+		cmpq $FILESIZE, %r15
 		jl denc_px
 
 	denc_barcode_end:	

@@ -61,6 +61,8 @@ rle_decode: # (string andress)
 
 	movq $0, %rsi
 	decode_bytes:
+		cmpq $0, encoded_string(%r15)
+		je rle_decode_end
 		movb encoded_string(%r15), %r14b 	# grab times
 		incq %r15
 		
@@ -75,13 +77,12 @@ rle_decode: # (string andress)
 			jg process_char
 
 		incq %r15
-		cmpq $0, encoded_string(%r15)
-		jne decode_bytes
+		jmp decode_bytes
 
+	rle_decode_end:
 	movq %rbp, %rax # return the andress of the stack andresses we used
 	movq %rbp, %rsp
 	popq %r15
 	popq %rbp
 	ret
 
-	ret
