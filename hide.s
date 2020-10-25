@@ -1,6 +1,8 @@
 .global main
 
 .include "helpers/rle.s"
+.include "helpers/barcode.s"
+.include "helpers/bitmap.s"
 
 .text 
 	digit: .asciz "%d"
@@ -21,6 +23,7 @@ main:
 	call rle_encode # encodes a message
 
 	call rle_decode # decodeds and for now pritns the message 
+	call write_file
 
 
 
