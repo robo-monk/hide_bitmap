@@ -19,9 +19,12 @@
 			.long 0		# color pallete
 			.long 0		# important colors
 			# 40 bytes long
+			# bs 54 bytes long
 	white_px: .byte 255, 255, 255
 	red_px: .byte 255, 70, 70
 	black_px: .byte 0, 0, 0
+
+	dirty_barcode: .skip FILESIZE	# skip size of image
 
 /*movq $3071, %r15*/
 /*movq $0, %rsi*/
@@ -30,6 +33,7 @@
 /*movq $0, %rax*/
 /*call printf*/
 write_file:
+# writes file & prepares barcode
 	pushq	%rbp 			# push the base pointer (and align the stack)
 	pushq	%r15
 	movq	%rsp, %rbp		# copy stack pointer value to base pointer
@@ -65,8 +69,43 @@ write_file:
 		movq $barcode, %rsi
 		movq $3072, %rdx	# write all bytes
 		syscall
+	
+	movq $3, %rax
+	popq %rdi
 
 	movq %rbp, %rsp
 	popq %r15
 	popq %rbp
 	ret
+
+read_file:
+# reads file & prepares barcode
+	pushq %rbp
+	pushq %r15
+	movq %rsp, %rbp
+	
+	movq $2, %rax# we want sys open
+	movq $filename, %rdi
+	movq $0, %rsi # we want read only
+	movq $420, %rdx
+	syscall
+	movq %rax, %r15 # file descriptor
+	read_barcode:
+		movq %r15, %rdi
+		movq $0, %rax		# we want sys read
+		movq $dirty_barcode, %rsi
+		movq $FILESIZE, %rdx	# write all bytes
+		syscall
+
+	movq $3, %rax # close file to be neat
+	popq %rdi
+
+
+	movq %rbp, %rsp
+	popq %r15
+	popq %rbp
+	ret
+
+
+
+

@@ -3,6 +3,7 @@
 	barcode_row_fmt: .asciz "WWWWWWWWBBBBBBBBWWWWBBBBWWBBBWWRE"
 	/*barcode_row_fmt: .asciz "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWR"*/
 	key: .skip 32
+	output: .skip 3072
 
 
 generate_barcode:
@@ -17,6 +18,7 @@ generate_barcode:
 			cmpb $'E', (%r14)
 			je add_row
 
+			jmp add_white
 			cmpb $'W', (%r14)
 			je add_white
 
@@ -84,6 +86,43 @@ encode_barcode:
 	popq %rbp
 	ret
 
+
+decode_barcode:
+	pushq %rbp	
+	movq %rsp, %rbp
+	
+	movq $50, %r15
+	denc_px:
+		movb dirty_barcode(%r15), %r13b
+		cmpq $FILESIZE, %r15
+		je denc_barcode_end
+
+		movb barcode(%r15), %r14b
+
+		xorb %r13b, %r14b
+		movq %r15, %r13
+		subq $50, %r13
+
+		movq $255, %r12
+		subq %r14, %r12
+
+		movb %r12b, encoded_string(%r13) # remove dirty barcode's offset
+
+		incq %r15
+		cmpq $3072, %r15
+		jl denc_px
+
+	denc_barcode_end:	
+	movq %rbp, %rsp
+	popq %rbp
+	ret
+
+
+	/*movq $0, %rsi*/
+	/*movb dirty_barcode(%r15), %sil*/
+	/*movq $digit, %rdi*/
+	/*movq $0, %rax*/
+	/*call printf*/
 
 
 
