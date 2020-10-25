@@ -39,6 +39,9 @@ rle_encode: # (string andress)
 	/*movq encoded, %rax*/
 
 	rle_encode_end:
+	incq %r13
+	movq $0, encoded_string(%r13)
+
 	movq %rbp, %rax # return the andress of the stack andresses we used
 	movq %rbp, %rsp
 	popq %r15

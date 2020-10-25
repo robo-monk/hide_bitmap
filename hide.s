@@ -19,12 +19,14 @@ main:
 	movq %rsp, %rbp
 	
 
+	call generate_barcode
+
 	movq $msg, %rdi
-	/*call rle_encode # encodes a message*/
+	call rle_encode # encodes a message
 
 	/*call rle_decode # decodeds and for now pritns the message */
 
-	call generate_barcode
+	call encode_barcode
 	/*movq $3071, %r15*/
 	/*movq $0, %rsi*/
 	/*movb barcode(%r15), %sil*/
