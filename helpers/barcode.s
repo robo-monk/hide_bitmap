@@ -1,7 +1,8 @@
 .data
 	barcode: .skip 3072	# skip size of image
-	barcode_row_fmt: .asciz "WBWBWBWWBBBBBBBBWRWWBBBBWWBBBWWRE" # basically the encryption key
-	/*barcode_row_fmt: .asciz "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWRE"*/
+	/*barcode_row_fmt: .asciz "WBWWWBWBBBBWWWWBWBBWWWWWBWWBBBBWE" # basically the encryption key*/
+	barcode_row_fmt: .asciz "BRWWWRBBBWBBWBBRBWWRBRBBWBBRRBWRE" # basically the encryption key
+	/*barcode_row_fmt: .asciz "BBBRWRWWRWWWRBBBWBWWWWRBWRRRRWRRE" # basically the encryption key*/
 	key: .skip 32
 	output: .skip 3072
 
