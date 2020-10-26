@@ -56,13 +56,18 @@ rle_decode: # (string andress)
 	movq	%rsp, %rbp		# copy stack pointer value to base pointer
 
 	
-	movq $0, %r15
+	movq $12, %r15
 	movq $0, %r14
+	movq $0, %r12
 
 	movq $0, %rsi
 	decode_bytes:
-		cmpq $0, encoded_string(%r15)
+		movq %r15, %r12
+		addq $12, %r12
+		cmpq $0, encoded_string(%r12)
+		
 		je rle_decode_end
+
 		movb encoded_string(%r15), %r14b 	# grab times
 		incq %r15
 		

@@ -21,9 +21,6 @@ main:
 	call read_file
 	call decode_barcode
 	
-	/*movq $encoded_string, %rdi*/
-	/*movq $0, %rax*/
-	/*call printf*/
 	call rle_decode
 	
 	movq %rbp, %rsp

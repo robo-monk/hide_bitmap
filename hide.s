@@ -11,8 +11,9 @@
 
 .data
 	msg:	.ascii "CCCCCCCCSSSSEE1111444400000000"
-		.ascii "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTThe answer for exam question 42 is not F."
-		.asciz  "CCCCCCCCSSSSEE1111444400000000"
+		.ascii "The answer for exam question 42 is not F."
+		.ascii "CCCCCCCCSSSSEE1111444400000000"
+		.asciz " "
 
 main:
 	pushq %rbp
